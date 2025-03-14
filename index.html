@@ -11,17 +11,22 @@
         .draggable { padding: 10px; background: lightblue; border: 1px solid #000; cursor: grab; display: inline-block; margin: 5px; }
         .drop-zone { position: absolute; width: 50px; height: 30px; background: rgba(255,255,255,0.8); border: 2px dashed black; }
         #check-button { margin-top: 10px; padding: 10px; background: green; color: white; cursor: pointer; }
+        #instructions { border: 2px solid black; padding: 10px; width: 50%; margin: auto; background-color: lightyellow; }
     </style>
 </head>
 <body>
     <h2>Cell Cycle Labeling Game</h2>
+    <div id="instructions">
+        <p>Match the stage of the cell cycle with its proper description on the diagram.</p>
+    </div>
+    <br>
     <div id="game-container">
         <img id="background" src="Cell_Cycle.jpg" alt="Cell Cycle Diagram">
-        <div class="drop-zone" style="top: 16%; left: 12%;" data-label="G0"></div>
-        <div class="drop-zone" style="top: 27%; left: 45%;" data-label="G1"></div>
-        <div class="drop-zone" style="top: 60%; left: 69%;" data-label="S"></div>
-        <div class="drop-zone" style="top: 74%; left: 39%;" data-label="G2"></div>
-        <div class="drop-zone" style="top: 52%; left: 35%;" data-label="Mitosis"></div>
+        <div class="drop-zone" style="top: 15%; left: 20%;" data-label="G0"></div>
+        <div class="drop-zone" style="top: 50%; left: 45%;" data-label="G1"></div>
+        <div class="drop-zone" style="top: 70%; left: 60%;" data-label="S"></div>
+        <div class="drop-zone" style="top: 85%; left: 40%;" data-label="G2"></div>
+        <div class="drop-zone" style="top: 55%; left: 15%;" data-label="Mitosis"></div>
     </div>
     <br>
     <div id="labels">
@@ -53,10 +58,8 @@
             zone.addEventListener('drop', event => {
                 event.preventDefault();
                 const droppedLabel = event.dataTransfer.getData('text');
-                if (!zone.textContent) {
-                    zone.textContent = droppedLabel;
-                    zone.style.background = 'lightgreen';
-                }
+                zone.textContent = droppedLabel;
+                zone.style.background = 'lightgreen';
             });
         });
         
@@ -66,9 +69,11 @@
                 if (zone.textContent.trim() !== zone.dataset.label) {
                     correct = false;
                     zone.style.background = 'red';
+                } else {
+                    zone.style.background = 'lightgreen';
                 }
             });
-            document.getElementById('result').textContent = correct ? 'Correct! Well done!' : 'Some answers are incorrect. Try again!';
+            document.getElementById('result').textContent = correct ? 'Correct! Well done!' : 'Some answers are incorrect. Adjust and try again!';
         });
     </script>
 </body>
