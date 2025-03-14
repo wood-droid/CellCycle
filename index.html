@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cell Cycle Labeling Game</title>
+    <style>
+        body { text-align: center; font-family: Arial, sans-serif; }
+        #game-container { position: relative; width: 600px; margin: auto; }
+        #background { width: 100%; }
+        .draggable { padding: 10px; background: lightblue; border: 1px solid #000; cursor: grab; display: inline-block; margin: 5px; }
+        .drop-zone { position: absolute; width: 50px; height: 30px; background: rgba(255,255,255,0.8); border: 2px dashed black; }
+        #check-button { margin-top: 10px; padding: 10px; background: green; color: white; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <h2>Cell Cycle Labeling Game</h2>
+    <div id="game-container">
+        <img id="background" src="/mnt/data/Cell Cycle.jpg" alt="Cell Cycle Diagram">
+        <div class="drop-zone" style="top: 10%; left: 10%;" data-label="G0"></div>
+        <div class="drop-zone" style="top: 40%; left: 30%;" data-label="G1"></div>
+        <div class="drop-zone" style="top: 60%; left: 50%;" data-label="S"></div>
+        <div class="drop-zone" style="top: 80%; left: 30%;" data-label="G2"></div>
+        <div class="drop-zone" style="top: 50%; left: 10%;" data-label="Mitosis"></div>
+    </div>
+    <br>
+    <div id="labels">
+        <div class="draggable" draggable="true" data-label="G0">G0</div>
+        <div class="draggable" draggable="true" data-label="G1">G1</div>
+        <div class="draggable" draggable="true" data-label="S">S</div>
+        <div class="draggable" draggable="true" data-label="G2">G2</div>
+        <div class="draggable" draggable="true" data-label="Mitosis">Mitosis</div>
+    </div>
+    <br>
+    <button id="check-button">Check Answers</button>
+    <p id="result"></p>
+    
+    <script>
+        const draggables = document.querySelectorAll('.draggable');
+        const dropZones = document.querySelectorAll('.drop-zone');
+        
+        draggables.forEach(draggable => {
+            draggable.addEventListener('dragstart', event => {
+                event.dataTransfer.setData('text', draggable.dataset.label);
+            });
+        });
+        
+        dropZones.forEach(zone => {
+            zone.addEventListener('dragover', event => {
+                event.preventDefault();
+            });
+            
+            zone.addEventListener('drop', event => {
+                event.preventDefault();
+                const droppedLabel = event.dataTransfer.getData('text');
+                if (!zone.textContent) {
+                    zone.textContent = droppedLabel;
+                    zone.style.background = 'lightgreen';
+                }
+            });
+        });
+        
+        document.getElementById('check-button').addEventListener('click', () => {
+            let correct = true;
+            dropZones.forEach(zone => {
+                if (zone.textContent.trim() !== zone.dataset.label) {
+                    correct = false;
+                    zone.style.background = 'red';
+                }
+            });
+            document.getElementById('result').textContent = correct ? 'Correct! Well done!' : 'Some answers are incorrect. Try again!';
+        });
+    </script>
+</body>
+</html>
